@@ -1,66 +1,46 @@
 'use strict';
 
-var bcrypt   = require('bcryptjs');
-var mongoose = require('mongoose');
+var mongoose    = require('mongoose'),
+    Schema      = mongoose.Schema;
 
 var UserSchema = new mongoose.Schema({
-    displayName: {
+    name: {
         type: String,
         required: true
     },
-    email: {
+    gender: {
         type: String,
-        trim: true,
-        lowercase: true,
-        unique: true,
-        match: [/.+\@.+\..+/, 'Please fill a valid email address']
+        default: ''
     },
-    password: {
+    birth: {
+        type: Date,
+        default: Date.now
+    },
+    weight: {
         type: String,
-        select: false
+        default: ''
+    },
+    height: {
+        type: String,
+        default: ''
+    },
+    address: {
+        type: String,
+        default: ''
     },
     picture: {
         type: String,
         default: ''
     },
-    facebook: {
-        type: String
-    },
-    twitter: {
-        type: String
-    },
-    google: {
-        type: String
-    },
     created: {
         type: Date,
         default: Date.now
+    },
+    account_id: {
+        type: Schema.ObjectId,
+        ref: 'Account',
+        required: true
     }
 });
-
-UserSchema.pre('save', function(next) {
-    var user = this;
-    if (!user.isModified('password')) {
-        return next();
-    }
-    bcrypt.genSalt(10, function(err, salt) {
-        if (err) {
-            return next(err);
-        }
-        bcrypt.hash(user.password, salt, function(err, hash) {
-            if (err) {
-                return next(err);
-            }
-            user.password = hash;
-            next();
-        });
-    });
-});
-
-UserSchema.methods.comparePassword = function(password, callback) {
-    bcrypt.compare(password, this.password, function(err, isMatch) {
-        callback(err, isMatch);
-    });
-};
 
 module.exports = mongoose.model('User', UserSchema);

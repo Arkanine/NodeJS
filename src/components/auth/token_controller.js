@@ -4,6 +4,11 @@ var jwt    = require('jwt-simple'),
     moment = require('moment'),
     config = require('../../config/config');
 
+module.exports = {
+    createToken: createToken,
+    verifyToken: verifyToken
+};
+
 function verifyToken(req, res, next) {
     if (!req.header('Authorization')) {
         return res.status(401).send({ message: 'Please make sure your request has an Authorization header' });
@@ -21,20 +26,16 @@ function verifyToken(req, res, next) {
     if (payload.exp <= moment().unix()) {
         return res.status(401).send({ message: 'Token has expired' });
     }
-    req.user = payload.sub;
+    req.account = payload.sub;
+
     next();
 }
 
-function createToken(user) {
+function createToken(account) {
     var payload = {
-        sub: user._id,
+        sub: account._id,
         iat: moment().unix(),
         exp: moment().add(14, 'days').unix()
     };
     return jwt.encode(payload, config.token.secret);
 }
-
-module.exports = {
-    createToken: createToken,
-    verifyToken: verifyToken
-};

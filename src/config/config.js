@@ -16,17 +16,15 @@ config.mongodb = {
 };
 
 config.token = {
-    secret: 'easy-app',
+    secret: 'uliv-app',
     expiration: 60*60*24*7 //week
 };
 
-config.networks = {
-    facebookSecret: 'ae7b3b7095e4cda06957afe4c942fce5',
-    googleSecret: 'hwQ6-35WYacalZ-93IzJR2dT',
-    twitterCredentials: {
-        secret: 'CyTxVER7tp0LAxDELdOuifvINbHegDzAWiQYO1RwlRExHadB5D',
-        key: 'EJJSHea8LxpsWIextcbDjVGVY'
-    }
+config.mailer = {
+    key: 'key-3e615b71b19f150392f0af58a251e970',
+    domain: 'pascalium.com',
+    login: 'roman.z@pilgrimconsultiong.com',
+    password: 'aaazzz'
 };
 
 module.exports = config;

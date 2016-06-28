@@ -1,15 +1,16 @@
 'use strict';
 
-var _    = require('lodash');
-var glob = require('glob');
-var path = require('path');
+var _    = require('lodash'),
+    glob = require('glob');
+
+exports.getGlobbedPaths = getGlobbedPaths;
 
 function getGlobbedPaths(globPatterns, excludes) {
     var urlRegex = new RegExp('^(?:[a-z]+:)?\/\/', 'i'),
         output = [];
 
     if (_.isArray(globPatterns)) {
-        globPatterns.forEach(function(globPattern) {
+        globPatterns.forEach(function (globPattern) {
             output = _.union(output, getGlobbedPaths(globPattern, excludes));
         });
     } else if (_.isString(globPatterns)) {
@@ -18,7 +19,7 @@ function getGlobbedPaths(globPatterns, excludes) {
         } else {
             var files = glob.sync(globPatterns);
             if (excludes) {
-                files = files.map(function(file) {
+                files = files.map(function (file) {
                     if (_.isArray(excludes)) {
                         for (var i in excludes) {
                             file = file.replace(excludes[i], '');
@@ -34,5 +35,3 @@ function getGlobbedPaths(globPatterns, excludes) {
     }
     return output;
 }
-
-exports.getGlobbedPaths = getGlobbedPaths;
